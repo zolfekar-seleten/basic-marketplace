@@ -1,5 +1,6 @@
 import { getApiErrorMessage } from "@/api/client";
 import { Button } from "@/components/ui/button";
+import { AddToCartButton } from "@/features/cart/components/AddToCartButton";
 import { getProduct, productImageUrl } from "@/features/products/api/products.api";
 import type { Product } from "@/features/products/types/product.types";
 import axios from "axios";
@@ -67,6 +68,7 @@ function ProductDetails({ product }: { product: Product }) {
       <p className="marketplace-details-eyebrow">{product.category.name}</p>
       <h1>{product.name}</h1>
       <p className="marketplace-detail-price">{formattedPrice}</p>
+      <AddToCartButton productId={product.id} stock={product.stock} className="marketplace-detail-add-cart" />
       <div className="marketplace-detail-divider" />
       <h2>Product details</h2>
       <p className="marketplace-detail-description">{product.description?.trim() || "No product description has been provided."}</p>

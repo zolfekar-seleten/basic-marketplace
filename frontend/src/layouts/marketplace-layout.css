@@ -18,6 +18,7 @@
 
 .marketplace-header nav {
   display: flex;
+  align-items: center;
   gap: 1.5rem;
 }
 
@@ -30,6 +31,42 @@
 .marketplace-header nav a:hover {
   color: #ec187b;
 }
+
+.marketplace-header nav .marketplace-cart-link {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  gap: .45rem;
+  border: 1px solid rgb(255 255 255 / 22%);
+  border-radius: 999px;
+  padding: .35rem .75rem;
+  color: white;
+  font-size: .9rem;
+  font-weight: 650;
+}
+
+.marketplace-header nav .marketplace-cart-link:hover {
+  border-color: #ec187b;
+  background: rgb(236 24 123 / 12%);
+}
+
+.marketplace-cart-nav-icon { width: 19px; height: 19px; }
+
+.marketplace-cart-count {
+  display: grid;
+  min-width: 20px;
+  height: 20px;
+  place-items: center;
+  border-radius: 999px;
+  background: #ec187b;
+  padding: 0 .25rem;
+  color: white;
+  font-size: .7rem;
+  font-weight: 750;
+  line-height: 1;
+}
+
+.marketplace-cart-link-loading { width: 76px; min-height: 30px; opacity: .3; }
 
 .marketplace-header nav .marketplace-nav-login,
 .marketplace-header nav .marketplace-nav-signup {

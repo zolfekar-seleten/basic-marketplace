@@ -42,13 +42,19 @@ export default function LoginPage() {
           : user.role.name === "supplier"
             ? "/dashboard/supplier"
             : null;
+      const isBuyerDestination =
+        typeof destination === "string" &&
+        ["/cart", "/checkout", "/my-orders"].some(
+          (path) =>
+            destination === path ||
+            destination.startsWith(`${path}/`) ||
+            (path === "/cart" && destination.startsWith("/cart?")),
+        );
       const canReturnToDestination =
         typeof destination === "string" &&
         destination.startsWith("/") &&
         (user.role.name === "buyer"
-          ? ["/cart", "/checkout", "/my-orders"].some(
-              (path) => destination === path || destination.startsWith(`${path}/`),
-            )
+          ? isBuyerDestination
           : rolePrefix !== null &&
             (destination === rolePrefix || destination.startsWith(`${rolePrefix}/`)));
       void navigate(canReturnToDestination ? destination : home, { replace: true });

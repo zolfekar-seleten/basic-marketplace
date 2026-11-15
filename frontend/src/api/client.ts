@@ -1,11 +1,15 @@
 import axios, { AxiosError } from "axios";
 import { clearAccessToken, getAccessToken } from "@/features/auth/token-storage";
 
-const apiBaseUrl = import.meta.env.VITE_API_URL?.trim();
+const configuredApiBaseUrl = import.meta.env.VITE_API_URL?.trim();
 
-if (!apiBaseUrl) {
+if (!configuredApiBaseUrl) {
   throw new Error("VITE_API_URL is required. Add it to frontend/.env.");
 }
+
+// In development, send API requests through Vite's same-origin proxy to avoid
+// browser CORS preflights for PATCH and DELETE requests.
+const apiBaseUrl = import.meta.env.DEV ? "/api" : configuredApiBaseUrl;
 
 export const apiClient = axios.create({
   baseURL: apiBaseUrl.replace(/\/$/, ""),

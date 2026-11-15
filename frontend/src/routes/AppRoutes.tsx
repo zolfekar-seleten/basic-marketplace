@@ -29,6 +29,7 @@ import MarketplaceHome from "@/pages/marketplace/MarketplaceHome";
 import AdminDashboardPage from "@/features/admin-dashboard/pages/AdminDashboardPage";
 import MarketplaceProductsPage from "@/features/products/pages/MarketplaceProductsPage";
 import MarketplaceProductDetailsPage from "@/features/products/pages/MarketplaceProductDetailsPage";
+import CartPage from "@/features/cart/pages/CartPage";
 import { Error404Page } from "@/pages/main/pages";
 import { Navigate, Route, Routes } from "react-router";
 
@@ -54,7 +55,7 @@ export default function AppRoutes() {
       </Route>
 
       <Route element={<RequireRoles roles={["buyer"]} />}>
-        <Route path="cart" element={<RoutePlaceholder title="Shopping cart" />} />
+        <Route path="cart" element={<CartPage />} />
         <Route path="checkout" element={<RoutePlaceholder title="Checkout" />} />
         <Route path="my-orders" element={<RoutePlaceholder title="My orders" />} />
       </Route>

@@ -3,6 +3,7 @@ import { listCategories } from "@/features/categories/api/categories.api";
 import type { Category } from "@/features/categories/types/category.types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AddToCartButton } from "@/features/cart/components/AddToCartButton";
 import { listProducts, productImageUrl } from "@/features/products/api/products.api";
 import type { Product, ProductListParams, ProductListResponse } from "@/features/products/types/product.types";
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
@@ -68,6 +69,7 @@ function ProductCard({ product, catalogLocation }: { product: Product; catalogLo
       <h2><Link to={`/products/${product.id}`} state={{ from: catalogLocation }}>{product.name}</Link></h2>
       {product.description && <p className="marketplace-product-description">{product.description}</p>}
       <div className="marketplace-product-card-footer"><strong>${Number(product.price).toFixed(2)}</strong><Link className="marketplace-view-product" to={`/products/${product.id}`} state={{ from: catalogLocation }}>View product <span aria-hidden="true">↗</span></Link></div>
+      <AddToCartButton productId={product.id} stock={product.stock} />
     </div>
   </article>;
 }
