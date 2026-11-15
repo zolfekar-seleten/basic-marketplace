@@ -27,8 +27,9 @@ import SupplierDashboardPage from "@/features/supplier-dashboard/pages/SupplierD
 import MarketplaceLayout from "@/layouts/MarketplaceLayout";
 import MarketplaceHome from "@/pages/marketplace/MarketplaceHome";
 import AdminDashboardPage from "@/features/admin-dashboard/pages/AdminDashboardPage";
+import MarketplaceProductsPage from "@/features/products/pages/MarketplaceProductsPage";
 import { Error404Page } from "@/pages/main/pages";
-import { Navigate, Route, Routes, useLocation } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 
 function DashboardEntry() {
   const { user } = useAuth();
@@ -36,11 +37,6 @@ function DashboardEntry() {
   if (user.role.name === "admin") return <Navigate to="/dashboard/admin" replace />;
   if (user.role.name === "supplier") return <Navigate to="/dashboard/supplier" replace />;
   return <Navigate to="/" replace />;
-}
-
-function PublicProductPlaceholder() {
-  const { pathname } = useLocation();
-  return <RoutePlaceholder title={pathname === "/products" ? "Products" : "Product details"} />;
 }
 
 export default function AppRoutes() {
@@ -52,8 +48,8 @@ export default function AppRoutes() {
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
         </Route>
-        <Route path="products" element={<PublicProductPlaceholder />} />
-        <Route path="products/:id" element={<PublicProductPlaceholder />} />
+        <Route path="products" element={<MarketplaceProductsPage />} />
+        <Route path="products/:id" element={<RoutePlaceholder title="Product details" />} />
       </Route>
 
       <Route element={<RequireRoles roles={["buyer"]} />}>

@@ -25,6 +25,8 @@ export interface ProductListParams {
   limit: number;
   search?: string;
   categoryId?: number;
+  minPrice?: number;
+  maxPrice?: number;
   isActive?: boolean;
   sortBy?: "price" | "name" | "createdAt";
   sortOrder?: "ASC" | "DESC";
