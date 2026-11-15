@@ -1,0 +1,69 @@
+.marketplace-shell {
+  min-height: 100vh;
+  background: #f8f7f3;
+  color: #20312b;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.marketplace-header {
+  display: flex;
+  min-height: 76px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e7e8df;
+  background: #fff;
+  padding: 0 clamp(1.25rem, 5vw, 5rem);
+}
+
+.marketplace-header nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.marketplace-header a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.marketplace-brand {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.marketplace-main {
+  width: min(100% - 2.5rem, 1180px);
+  margin: 0 auto;
+  padding: clamp(3rem, 8vw, 7rem) 0;
+}
+
+.marketplace-intro {
+  max-width: 680px;
+}
+
+.marketplace-intro h1 {
+  margin: 0 0 1rem;
+  color: #20312b;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 650;
+  letter-spacing: -0.055em;
+  line-height: 1.04;
+}
+
+.marketplace-intro p {
+  max-width: 530px;
+  margin: 0;
+  color: #63716b;
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+@media (max-width: 540px) {
+  .marketplace-header {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.75rem;
+    padding-block: 1rem;
+  }
+}
