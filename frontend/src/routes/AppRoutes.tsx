@@ -15,6 +15,12 @@ import CreatePermissionPage from "@/features/permissions/pages/CreatePermissionP
 import PermissionDetailsPage from "@/features/permissions/pages/PermissionDetailsPage";
 import RolesPage from "@/features/roles/pages/RolesPage";
 import RoleDetailsPage from "@/features/roles/pages/RoleDetailsPage";
+import CategoriesPage from "@/features/categories/pages/CategoriesPage";
+import CreateCategoryPage from "@/features/categories/pages/CreateCategoryPage";
+import CategoryDetailsPage from "@/features/categories/pages/CategoryDetailsPage";
+import ProductsPage from "@/features/products/pages/ProductsPage";
+import CreateProductPage from "@/features/products/pages/CreateProductPage";
+import ProductDetailsPage from "@/features/products/pages/ProductDetailsPage";
 import MarketplaceLayout from "@/layouts/MarketplaceLayout";
 import MarketplaceHome from "@/pages/marketplace/MarketplaceHome";
 import EcommercePage from "@/pages/main/dashboard/ecommerce";
@@ -68,6 +74,9 @@ export default function AppRoutes() {
           <Route path="permissions/:id" element={<PermissionDetailsPage />} />
           <Route path="roles" element={<RolesPage />} />
           <Route path="roles/:id" element={<RoleDetailsPage />} />
+          <Route path="categories" element={<CategoriesPage />} />
+          <Route path="categories/new" element={<CreateCategoryPage />} />
+          <Route path="categories/:id" element={<CategoryDetailsPage />} />
           <Route path="*" element={<RoutePlaceholder title="Admin dashboard" />} />
         </Route>
       </Route>
@@ -75,6 +84,9 @@ export default function AppRoutes() {
       <Route path="dashboard/supplier" element={<RequireRoles roles={["supplier"]} />}>
         <Route element={<AppLayout />}>
           <Route index element={<RoutePlaceholder title="Supplier dashboard" />} />
+          <Route path="products" element={<ProductsPage />} />
+          <Route path="products/new" element={<CreateProductPage />} />
+          <Route path="products/:id" element={<ProductDetailsPage />} />
           <Route path="*" element={<RoutePlaceholder title="Supplier dashboard" />} />
         </Route>
       </Route>

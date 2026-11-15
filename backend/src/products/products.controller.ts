@@ -65,6 +65,26 @@ export class ProductsController {
     return this.productsService.findAll(query);
   }
 
+  @Get('my')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions('products.view')
+  findMine(
+    @Query() query: ListProductsDto,
+    @CurrentAuthorizationContext() actor: UserAuthorizationContext,
+  ) {
+    return this.productsService.findMine(query, actor);
+  }
+
+  @Get('my/:id')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions('products.view')
+  findMineOne(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentAuthorizationContext() actor: UserAuthorizationContext,
+  ) {
+    return this.productsService.findMineOne(id, actor);
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.findOne(id);

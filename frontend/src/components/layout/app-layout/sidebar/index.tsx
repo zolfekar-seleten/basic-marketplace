@@ -73,7 +73,9 @@ export default function AppSidebar() {
     .map((section) => ({
       ...section,
       items: section.items.filter(
-        (item) => !item.adminOnly || user?.role.name === "admin",
+        (item) =>
+          (!item.adminOnly || user?.role.name === "admin") &&
+          (!item.supplierOnly || user?.role.name === "supplier"),
       ),
     }))
     .filter((section) => section.items.length > 0);

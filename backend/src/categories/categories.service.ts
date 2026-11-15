@@ -43,6 +43,13 @@ export class CategoriesService {
     return categories.map((category) => this.toResponse(category, counts));
   }
 
+  findProductOptions(): Promise<Array<Pick<Category, 'id' | 'name'>>> {
+    return this.categoriesRepository.find({
+      select: { id: true, name: true },
+      order: { name: 'ASC' },
+    });
+  }
+
   async findOne(id: number): Promise<CategoryResponse> {
     const category = await this.categoriesRepository.findOneBy({ id });
 

@@ -101,25 +101,7 @@ export class ProductsService {
   async findAll(query: ListProductsDto) {
     const page = query.page ?? 1;
     const limit = query.limit ?? 20;
-    const builder = this.productsRepository
-      .createQueryBuilder('product')
-      .select([
-        'product.id',
-        'product.name',
-        'product.description',
-        'product.price',
-        'product.stock',
-        'product.imageUrl',
-        'product.isActive',
-        'product.categoryId',
-        'product.supplierId',
-        'product.createdAt',
-        'product.updatedAt',
-      ])
-      .innerJoin('product.category', 'category')
-      .addSelect(['category.id', 'category.name'])
-      .innerJoin('product.supplier', 'supplier')
-      .addSelect(['supplier.id', 'supplier.name']);
+    const builder = this.createProductQuery(this.productsRepository);
 
     builder.andWhere('product.isActive = true');
 
@@ -182,6 +164,69 @@ export class ProductsService {
       limit,
       totalPages: Math.ceil(total / limit),
     };
+  }
+
+  async findMine(query: ListProductsDto, actor: UserAuthorizationContext) {
+    this.assertSupplier(actor);
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 20;
+    const builder = this.createProductQuery(this.productsRepository)
+      .where('product.supplierId = :supplierId', { supplierId: actor.id });
+
+    if (query.search) {
+      builder.andWhere('product.name ILIKE :search', {
+        search: `%${query.search}%`,
+      });
+    }
+    if (query.categoryId !== undefined) {
+      builder.andWhere('product.categoryId = :categoryId', {
+        categoryId: query.categoryId,
+      });
+    }
+    if (query.isActive !== undefined) {
+      builder.andWhere('product.isActive = :isActive', {
+        isActive: query.isActive,
+      });
+    }
+
+    const sortColumns = {
+      price: 'product.price',
+      name: 'product.name',
+      createdAt: 'product.createdAt',
+    } as const;
+    const [products, total] = await builder
+      .orderBy(
+        sortColumns[query.sortBy ?? 'createdAt'],
+        query.sortOrder ?? 'DESC',
+      )
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getManyAndCount();
+
+    return {
+      data: products.map((product) => this.toResponse(product)),
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
+  }
+
+  async findMineOne(
+    id: number,
+    actor: UserAuthorizationContext,
+  ): Promise<ProductResponse> {
+    this.assertSupplier(actor);
+    const product = await this.createProductQuery(this.productsRepository)
+      .where('product.id = :id', { id })
+      .andWhere('product.supplierId = :supplierId', { supplierId: actor.id })
+      .getOne();
+
+    if (!product) {
+      throw new NotFoundException(`Product ${id} was not found`);
+    }
+
+    return this.toResponse(product);
   }
 
   async findOne(id: number): Promise<ProductResponse> {
@@ -365,6 +410,19 @@ export class ProductsService {
   private createProductQuery(repository: Repository<Product>) {
     return repository
       .createQueryBuilder('product')
+      .select([
+        'product.id',
+        'product.name',
+        'product.description',
+        'product.price',
+        'product.stock',
+        'product.imageUrl',
+        'product.isActive',
+        'product.categoryId',
+        'product.supplierId',
+        'product.createdAt',
+        'product.updatedAt',
+      ])
       .innerJoin('product.category', 'category')
       .addSelect(['category.id', 'category.name'])
       .innerJoin('product.supplier', 'supplier')
@@ -382,6 +440,12 @@ export class ProductsService {
 
   private assertCanManageProducts(actor: UserAuthorizationContext): void {
     if (actor.role.name !== 'supplier' && actor.role.name !== 'admin') {
+      throw new ForbiddenException();
+    }
+  }
+
+  private assertSupplier(actor: UserAuthorizationContext): void {
+    if (actor.role.name !== 'supplier') {
       throw new ForbiddenException();
     }
   }

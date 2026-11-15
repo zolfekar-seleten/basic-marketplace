@@ -28,6 +28,12 @@ export class CategoriesController {
     return this.categoriesService.findAll();
   }
 
+  @Get('options')
+  @Permissions('products.create')
+  findProductOptions() {
+    return this.categoriesService.findProductOptions();
+  }
+
   @Get(':id')
   @Permissions('categories.view')
   findOne(@Param('id', ParseIntPipe) id: number) {
