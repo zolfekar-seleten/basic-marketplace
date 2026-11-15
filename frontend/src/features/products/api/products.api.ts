@@ -23,6 +23,11 @@ export async function listMyProducts(params: ProductListParams, signal?: AbortSi
   return response.data;
 }
 
+export async function listProducts(params: ProductListParams, signal?: AbortSignal): Promise<ProductListResponse> {
+  const response = await apiClient.get<ProductListResponse>("/products", { params, signal });
+  return response.data;
+}
+
 export async function getMyProduct(id: number, signal?: AbortSignal): Promise<Product> {
   const response = await apiClient.get<Product>(`/products/my/${id}`, { signal });
   return response.data;

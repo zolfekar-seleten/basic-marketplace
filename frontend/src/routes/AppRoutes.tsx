@@ -26,7 +26,7 @@ import SupplierOrderDetailsPage from "@/features/orders/pages/SupplierOrderDetai
 import SupplierDashboardPage from "@/features/supplier-dashboard/pages/SupplierDashboardPage";
 import MarketplaceLayout from "@/layouts/MarketplaceLayout";
 import MarketplaceHome from "@/pages/marketplace/MarketplaceHome";
-import EcommercePage from "@/pages/main/dashboard/ecommerce";
+import AdminDashboardPage from "@/features/admin-dashboard/pages/AdminDashboardPage";
 import { Error404Page } from "@/pages/main/pages";
 import { Navigate, Route, Routes, useLocation } from "react-router";
 
@@ -68,7 +68,7 @@ export default function AppRoutes() {
 
       <Route path="dashboard/admin" element={<RequireRoles roles={["admin"]} />}>
         <Route element={<AppLayout />}>
-          <Route index element={<EcommercePage />} />
+          <Route index element={<AdminDashboardPage />} />
           <Route path="suppliers" element={<SuppliersPage />} />
           <Route path="suppliers/new" element={<CreateSupplierPage />} />
           <Route path="suppliers/:id" element={<SupplierDetailsPage />} />
