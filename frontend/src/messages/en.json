@@ -24,6 +24,7 @@
     "items": {
       "dashboard": "Dashboard",
       "suppliers": "Suppliers",
+      "permissions": "Permissions",
       "ecommerceHome": "Ecommerce",
       "analytics": "Analytics",
       "marketing": "Marketing",

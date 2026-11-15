@@ -24,6 +24,7 @@
     "items": {
       "dashboard": "لوحة التحكم",
       "suppliers": "الموردون",
+      "permissions": "الأذونات",
       "ecommerceHome": "التجارة الإلكترونية",
       "analytics": "التحليلات",
       "marketing": "التسويق",

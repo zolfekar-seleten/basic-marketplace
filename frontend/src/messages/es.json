@@ -24,6 +24,7 @@
     "items": {
       "dashboard": "Panel",
       "suppliers": "Proveedores",
+      "permissions": "Permisos",
       "ecommerceHome": "Comercio electrónico",
       "analytics": "Analítica",
       "marketing": "Marketing",

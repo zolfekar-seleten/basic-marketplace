@@ -1,4 +1,4 @@
-import { LayoutGridIcon, UsersIcon } from "@/icons";
+import { KeyIcon, LayoutGridIcon, UsersIcon } from "@/icons";
 import type { NavItem } from "./types";
 
 export const navItems: NavItem[] = [
@@ -11,6 +11,12 @@ export const navItems: NavItem[] = [
     icon: <UsersIcon className="size-6" />,
     key: "suppliers",
     path: "/dashboard/admin/suppliers",
+    adminOnly: true,
+  },
+  {
+    icon: <KeyIcon className="size-6" />,
+    key: "permissions",
+    path: "/dashboard/admin/permissions",
     adminOnly: true,
   },
 ];

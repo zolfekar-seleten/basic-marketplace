@@ -10,6 +10,9 @@ import RoutePlaceholder from "@/features/auth/pages/RoutePlaceholder";
 import SuppliersPage from "@/features/suppliers/pages/SuppliersPage";
 import CreateSupplierPage from "@/features/suppliers/pages/CreateSupplierPage";
 import SupplierDetailsPage from "@/features/suppliers/pages/SupplierDetailsPage";
+import PermissionsPage from "@/features/permissions/pages/PermissionsPage";
+import CreatePermissionPage from "@/features/permissions/pages/CreatePermissionPage";
+import PermissionDetailsPage from "@/features/permissions/pages/PermissionDetailsPage";
 import MarketplaceLayout from "@/layouts/MarketplaceLayout";
 import MarketplaceHome from "@/pages/marketplace/MarketplaceHome";
 import EcommercePage from "@/pages/main/dashboard/ecommerce";
@@ -58,6 +61,9 @@ export default function AppRoutes() {
           <Route path="suppliers" element={<SuppliersPage />} />
           <Route path="suppliers/new" element={<CreateSupplierPage />} />
           <Route path="suppliers/:id" element={<SupplierDetailsPage />} />
+          <Route path="permissions" element={<PermissionsPage />} />
+          <Route path="permissions/new" element={<CreatePermissionPage />} />
+          <Route path="permissions/:id" element={<PermissionDetailsPage />} />
           <Route path="*" element={<RoutePlaceholder title="Admin dashboard" />} />
         </Route>
       </Route>
