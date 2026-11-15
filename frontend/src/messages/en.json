@@ -23,6 +23,7 @@
     },
     "items": {
       "dashboard": "Dashboard",
+      "suppliers": "Suppliers",
       "ecommerceHome": "Ecommerce",
       "analytics": "Analytics",
       "marketing": "Marketing",

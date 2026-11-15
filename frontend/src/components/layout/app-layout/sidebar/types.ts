@@ -16,5 +16,6 @@ export interface NavItem {
   path?: string;
   new?: boolean;
   target?: string;
+  adminOnly?: boolean;
   subItems?: SubItem[];
 }

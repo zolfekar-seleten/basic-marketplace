@@ -7,6 +7,9 @@ import { useAuth } from "@/features/auth/hooks/useAuth";
 import LoginPage from "@/features/auth/pages/LoginPage";
 import RegisterPage from "@/features/auth/pages/RegisterPage";
 import RoutePlaceholder from "@/features/auth/pages/RoutePlaceholder";
+import SuppliersPage from "@/features/suppliers/pages/SuppliersPage";
+import CreateSupplierPage from "@/features/suppliers/pages/CreateSupplierPage";
+import SupplierDetailsPage from "@/features/suppliers/pages/SupplierDetailsPage";
 import MarketplaceLayout from "@/layouts/MarketplaceLayout";
 import MarketplaceHome from "@/pages/marketplace/MarketplaceHome";
 import EcommercePage from "@/pages/main/dashboard/ecommerce";
@@ -52,6 +55,9 @@ export default function AppRoutes() {
       <Route path="dashboard/admin" element={<RequireRoles roles={["admin"]} />}>
         <Route element={<AppLayout />}>
           <Route index element={<EcommercePage />} />
+          <Route path="suppliers" element={<SuppliersPage />} />
+          <Route path="suppliers/new" element={<CreateSupplierPage />} />
+          <Route path="suppliers/:id" element={<SupplierDetailsPage />} />
           <Route path="*" element={<RoutePlaceholder title="Admin dashboard" />} />
         </Route>
       </Route>

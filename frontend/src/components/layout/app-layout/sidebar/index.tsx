@@ -4,6 +4,7 @@ import {
   SidebarFooter,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useState } from "react";
 import { useLocation } from "react-router";
 import { navItems, othersItems, supportItems } from "./data";
@@ -38,6 +39,7 @@ const findMatchingSubmenu = (path: string) => {
 };
 
 export default function AppSidebar() {
+  const { user } = useAuth();
   const { open, isMobile, isHovered } = useSidebar();
   const { pathname } = useLocation();
 
@@ -67,9 +69,14 @@ export default function AppSidebar() {
     });
   };
 
-  const activeSections = menuSections.filter(
-    (section) => section.items.length > 0,
-  );
+  const activeSections = menuSections
+    .map((section) => ({
+      ...section,
+      items: section.items.filter(
+        (item) => !item.adminOnly || user?.role.name === "admin",
+      ),
+    }))
+    .filter((section) => section.items.length > 0);
 
   return (
     <Sidebar side="left" collapsible="icon">

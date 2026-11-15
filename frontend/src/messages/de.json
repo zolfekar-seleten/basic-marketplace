@@ -23,6 +23,7 @@
     },
     "items": {
       "dashboard": "Dashboard",
+      "suppliers": "Lieferanten",
       "ecommerceHome": "E-Commerce",
       "analytics": "Analytik",
       "marketing": "Marketing",

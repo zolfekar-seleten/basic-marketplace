@@ -23,6 +23,7 @@
     },
     "items": {
       "dashboard": "لوحة التحكم",
+      "suppliers": "الموردون",
       "ecommerceHome": "التجارة الإلكترونية",
       "analytics": "التحليلات",
       "marketing": "التسويق",
