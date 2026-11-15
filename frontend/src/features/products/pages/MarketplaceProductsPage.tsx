@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { listProducts, productImageUrl } from "@/features/products/api/products.api";
 import type { Product, ProductListParams, ProductListResponse } from "@/features/products/types/product.types";
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
-import { Link, useSearchParams } from "react-router";
+import { Link, useLocation, useSearchParams } from "react-router";
 import "./marketplace-products.css";
 
 const PAGE_SIZE = 12;
@@ -55,25 +55,26 @@ function CatalogSkeleton() {
   return <div className="marketplace-product-grid" aria-label="Loading products" aria-busy="true">{Array.from({ length: 8 }, (_, index) => <div className="marketplace-product-skeleton" key={index}><div className="marketplace-skeleton-image" /><div className="marketplace-skeleton-line" /><div className="marketplace-skeleton-line short" /></div>)}</div>;
 }
 
-function ProductCard({ product }: { product: Product }) {
+function ProductCard({ product, catalogLocation }: { product: Product; catalogLocation: string }) {
   const available = product.stock > 0;
   const image = productImageUrl(product.imageUrl);
   return <article className="marketplace-product-card">
-    <Link className="marketplace-product-image" to={`/products/${product.id}`} aria-label={`View ${product.name}`}>
+    <Link className="marketplace-product-image" to={`/products/${product.id}`} state={{ from: catalogLocation }} aria-label={`View ${product.name}`}>
       {image ? <img src={image} alt={product.name} loading="lazy" /> : <div className="marketplace-product-image-placeholder" aria-hidden="true"><span>Watermelon</span></div>}
       <span className={`marketplace-availability ${available ? "available" : "unavailable"}`}>{available ? "In stock" : "Out of stock"}</span>
     </Link>
     <div className="marketplace-product-card-body">
       <p className="marketplace-product-category">{product.category.name}</p>
-      <h2><Link to={`/products/${product.id}`}>{product.name}</Link></h2>
+      <h2><Link to={`/products/${product.id}`} state={{ from: catalogLocation }}>{product.name}</Link></h2>
       {product.description && <p className="marketplace-product-description">{product.description}</p>}
-      <div className="marketplace-product-card-footer"><strong>${Number(product.price).toFixed(2)}</strong><Link className="marketplace-view-product" to={`/products/${product.id}`}>View product <span aria-hidden="true">↗</span></Link></div>
+      <div className="marketplace-product-card-footer"><strong>${Number(product.price).toFixed(2)}</strong><Link className="marketplace-view-product" to={`/products/${product.id}`} state={{ from: catalogLocation }}>View product <span aria-hidden="true">↗</span></Link></div>
     </div>
   </article>;
 }
 
 export default function MarketplaceProductsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
   const [searchDraft, setSearchDraft] = useState(searchParams.get("q") ?? "");
   const [minDraft, setMinDraft] = useState(searchParams.get("min") ?? "");
   const [maxDraft, setMaxDraft] = useState(searchParams.get("max") ?? "");
@@ -169,7 +170,7 @@ export default function MarketplaceProductsPage() {
       <section className="marketplace-catalog-results" aria-label="Product results" aria-live="polite">
         {error ? <div className="marketplace-catalog-message marketplace-catalog-error"><h2>Products could not be loaded</h2><p role="alert">{error}</p><Button onClick={() => { setLoading(true); setReload((value) => value + 1); }}>Try again</Button></div>
           : loading ? <CatalogSkeleton />
-          : result?.data.length ? <><div className="marketplace-product-grid">{result.data.map((product) => <ProductCard key={product.id} product={product} />)}</div><div className="marketplace-pagination"><span>Showing {first}–{last} of {result.total}</span><div><Button variant="outline" disabled={page <= 1} onClick={() => setSearchParams((current) => updateParams(current, { page: String(page - 1) }))}>Previous</Button><span>Page {result.page} of {Math.max(1, result.totalPages)}</span><Button variant="outline" disabled={page >= result.totalPages} onClick={() => setSearchParams((current) => updateParams(current, { page: String(page + 1) }))}>Next</Button></div></div></>
+          : result?.data.length ? <><div className="marketplace-product-grid">{result.data.map((product) => <ProductCard key={product.id} product={product} catalogLocation={`${location.pathname}${location.search}`} />)}</div><div className="marketplace-pagination"><span>Showing {first}–{last} of {result.total}</span><div><Button variant="outline" disabled={page <= 1} onClick={() => setSearchParams((current) => updateParams(current, { page: String(page - 1) }))}>Previous</Button><span>Page {result.page} of {Math.max(1, result.totalPages)}</span><Button variant="outline" disabled={page >= result.totalPages} onClick={() => setSearchParams((current) => updateParams(current, { page: String(page + 1) }))}>Next</Button></div></div></>
           : <div className="marketplace-catalog-message"><span className="marketplace-empty-mark" aria-hidden="true">W</span><h2>{hasFilters ? "No products match your filters" : "No products are available yet"}</h2><p>{hasFilters ? "Try a different search or remove one of your filters." : "Check back soon for new products from our suppliers."}</p>{hasFilters && <Button variant="outline" onClick={clearFilters}>Clear filters</Button>}</div>}
       </section>
     </div>
