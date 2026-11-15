@@ -106,7 +106,7 @@ export default function SupplierDetailsPage() {
         <h1 className="text-lg font-semibold text-gray-800 dark:text-white/90">
           Unable to load supplier
         </h1>
-        <p role="alert" className="mt-2 text-sm text-red-600">
+        <p role="alert" className="mt-2 text-sm text-red-600 dark:text-red-400">
           {currentError ?? "Supplier not found"}
         </p>
         <div className="mt-5 flex justify-center gap-3">

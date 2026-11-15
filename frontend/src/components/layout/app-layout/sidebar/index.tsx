@@ -1,7 +1,6 @@
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/features/auth/hooks/useAuth";
@@ -10,7 +9,6 @@ import { useLocation } from "react-router";
 import { navItems, othersItems, supportItems } from "./data";
 import AppSidebarHeader from "./sidebar-header";
 import SidebarNavGroup from "./sidebar-nav-group";
-import SidebarWidget from "./sidebar-widget";
 import type { MenuType, NavItem } from "./types";
 
 const menuSections: { type: MenuType; labelKey: string; items: NavItem[] }[] = [
@@ -103,11 +101,6 @@ export default function AppSidebar() {
         </nav>
       </SidebarContent>
 
-      {showContent && (
-        <SidebarFooter className="p-0 px-5 pt-1 pb-4">
-          <SidebarWidget />
-        </SidebarFooter>
-      )}
     </Sidebar>
   );
 }

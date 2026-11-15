@@ -150,7 +150,7 @@ export default function SuppliersPage() {
 
         {error ? (
           <div className="px-6 py-14 text-center">
-            <p role="alert" className="text-sm text-red-600">{error}</p>
+            <p role="alert" className="text-sm text-red-600 dark:text-red-400">{error}</p>
             <Button className="mt-4" variant="outline" onClick={handleRefresh}>
               Try again
             </Button>

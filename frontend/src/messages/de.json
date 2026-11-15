@@ -136,11 +136,6 @@
       "variants03": "Varianten 03",
       "variants04": "Varianten 04",
       "variants05": "Varianten 05"
-    },
-    "widget": {
-      "title": "#1 Tailwind CSS Dashboard",
-      "description": "Führendes Tailwind CSS Admin-Template mit über 500 UI-Komponenten und Seiten.",
-      "purchasePlan": "Plan kaufen"
     }
   },
   "header": {

@@ -124,7 +124,7 @@ export default function PermissionsPage() {
 
         {error ? (
           <div className="px-6 py-14 text-center">
-            <p role="alert" className="text-sm text-red-600">{error}</p>
+            <p role="alert" className="text-sm text-red-600 dark:text-red-400">{error}</p>
             <Button className="mt-4" variant="outline" onClick={handleRetry}>
               Try again
             </Button>
@@ -162,7 +162,7 @@ export default function PermissionsPage() {
                         </p>
                       </TableCell>
                       <TableCell className="min-w-64 px-6 py-4 text-sm text-gray-600 dark:text-gray-300">
-                        {permission.description || <span className="text-gray-400">No description</span>}
+                        {permission.description || <span className="text-gray-400 dark:text-gray-400">No description</span>}
                       </TableCell>
                       <TableCell className="px-6 py-4">
                         <div className="flex justify-end gap-2">

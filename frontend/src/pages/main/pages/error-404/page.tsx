@@ -5,8 +5,8 @@ export default function Error404Page() {
   return (
     <div>
       <PageMeta
-        title="React.js 404 Page | TailAdmin - React.js Admin Dashboard Template"
-        description="This is React.js 404  page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+        title="React.js 404 Page | Dashboard - React.js Admin Dashboard Template"
+        description="This is React.js 404  page for Dashboard - React.js Tailwind CSS Admin Dashboard Template"
       />
       <Error404 />
     </div>

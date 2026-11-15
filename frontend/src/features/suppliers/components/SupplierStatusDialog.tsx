@@ -55,7 +55,7 @@ export function SupplierStatusDialog({
               : `${supplier?.name ?? "This supplier"} will be able to sign in and manage supplier activity again.`}
           </DialogDescription>
         </DialogHeader>
-        {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
+        {error && <p role="alert" className="text-sm text-red-600 dark:text-red-400">{error}</p>}
         <DialogFooter>
           <Button
             variant="outline"

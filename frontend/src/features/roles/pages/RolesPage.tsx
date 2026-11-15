@@ -30,7 +30,7 @@ export default function RolesPage() {
           <h2 className="font-medium text-gray-800 dark:text-white/90">Available roles</h2>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{loading ? "Loading roles…" : `${roles.length} role${roles.length === 1 ? "" : "s"}`}</p>
         </div>
-        {error ? <div className="px-6 py-12 text-center"><p role="alert" className="text-sm text-red-600">{error}</p><Button className="mt-4" variant="outline" onClick={() => { setError(null); setReload((value) => value + 1); }}>Try again</Button></div>
+        {error ? <div className="px-6 py-12 text-center"><p role="alert" className="text-sm text-red-600 dark:text-red-400">{error}</p><Button className="mt-4" variant="outline" onClick={() => { setError(null); setReload((value) => value + 1); }}>Try again</Button></div>
           : loading ? <div className="space-y-3 p-6" aria-label="Loading roles">{[1, 2, 3].map((item) => <div key={item} className="h-20 animate-pulse rounded-xl bg-gray-100 dark:bg-gray-800" />)}</div>
           : roles.length ? <ul className="divide-y divide-gray-100 dark:divide-gray-800">{roles.map((role) => <li key={role.id} className="flex flex-wrap items-center justify-between gap-4 px-5 py-5 sm:px-6">
             <div><h3 className="font-medium capitalize text-gray-800 dark:text-white/90">{role.name}</h3><p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{role.description || "No description provided."}</p></div>

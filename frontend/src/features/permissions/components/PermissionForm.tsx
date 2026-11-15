@@ -83,7 +83,7 @@ export function PermissionForm({
             Use a lowercase resource.action name. Names cannot be edited after creation.
           </p>
           {errors.name && (
-            <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.name.message}</p>
           )}
         </div>
       ) : (
@@ -127,7 +127,7 @@ export function PermissionForm({
         />
         <div className="mt-1 flex justify-between gap-3">
           {errors.description ? (
-            <p className="text-sm text-red-600">{errors.description.message}</p>
+            <p className="text-sm text-red-600 dark:text-red-400">{errors.description.message}</p>
           ) : (
             <span className="text-xs text-gray-500 dark:text-gray-400">
               Optional, up to 255 characters.

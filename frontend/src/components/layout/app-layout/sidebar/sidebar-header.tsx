@@ -1,4 +1,5 @@
 import { SidebarHeader } from "@/components/ui/sidebar";
+import { LayoutGridIcon } from "@/icons";
 import { Link } from "react-router";
 
 interface AppSidebarHeaderProps {
@@ -12,20 +13,9 @@ export default function AppSidebarHeader({
     <SidebarHeader className="px-5 py-8">
       <Link to="/dashboard">
         {showContent ? (
-          <>
-            <img
-              className="h-10 w-37.5 dark:hidden"
-              src="/images/logo/logo.svg"
-              alt="Logo"
-            />
-            <img
-              className="hidden h-10 w-37.5 dark:block"
-              src="/images/logo/logo-dark.svg"
-              alt="Logo"
-            />
-          </>
+          <span className="flex h-10 items-center gap-3 text-lg font-semibold text-gray-800 dark:text-white/90"><LayoutGridIcon className="size-7 text-[#ec187b]" />Dashboard</span>
         ) : (
-          <img src="/images/logo/logo-icon.svg" alt="Logo" className="size-8" />
+          <LayoutGridIcon className="size-8 text-[#ec187b]" aria-label="Dashboard" />
         )}
       </Link>
     </SidebarHeader>

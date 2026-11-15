@@ -96,7 +96,7 @@ export function SupplierForm({
           aria-invalid={Boolean(errors.name)}
           {...register("name")}
         />
-        {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>}
+        {errors.name && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.name.message}</p>}
       </div>
 
       <div>
@@ -111,7 +111,7 @@ export function SupplierForm({
           aria-invalid={Boolean(errors.email)}
           {...register("email")}
         />
-        {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
+        {errors.email && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.email.message}</p>}
       </div>
 
       {mode === "create" && (
@@ -130,7 +130,7 @@ export function SupplierForm({
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
             The supplier can change this password after signing in.
           </p>
-          {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>}
+          {errors.password && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.password.message}</p>}
         </div>
       )}
 
