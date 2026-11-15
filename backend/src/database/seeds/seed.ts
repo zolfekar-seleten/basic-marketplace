@@ -3,6 +3,7 @@ import 'dotenv/config';
 
 import dataSource from '../data-source';
 import { getAdminSeedConfig, seedAdmin } from './admin.seed';
+import { seedCategories } from './categories.seed';
 import { seedPermissions } from './permissions.seed';
 import { seedRolePermissions } from './role-permissions.seed';
 import { seedRoles } from './roles.seed';
@@ -29,6 +30,7 @@ async function seed(): Promise<void> {
         permissions,
         adminUser.id,
       );
+      await seedCategories(manager);
     });
 
     console.info('Database seeding completed successfully.');

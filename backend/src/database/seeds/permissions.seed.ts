@@ -27,6 +27,10 @@ export const permissionDefinitions = [
     name: 'roles.assign_permissions',
     description: 'Assign or revoke permissions from roles',
   },
+  { name: 'categories.view', description: 'View marketplace categories' },
+  { name: 'categories.create', description: 'Create marketplace categories' },
+  { name: 'categories.update', description: 'Update marketplace categories' },
+  { name: 'categories.delete', description: 'Delete marketplace categories' },
 ] as const;
 
 export const permissionNames = permissionDefinitions.map(

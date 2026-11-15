@@ -39,6 +39,10 @@ const permissionsByRole: Record<string, readonly PermissionName[]> = {
     'permissions.delete',
     'roles.view',
     'roles.assign_permissions',
+    'categories.view',
+    'categories.create',
+    'categories.update',
+    'categories.delete',
   ],
 };
 
