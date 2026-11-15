@@ -1,18 +1,20 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { QueryFailedError, Repository } from 'typeorm';
+import { DataSource, QueryFailedError, Repository } from 'typeorm';
 
 import { Role } from '../roles/entities/role.entity';
 import { User } from '../users/entities/user.entity';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { AuthenticatedUser } from './interfaces/authenticated-user.interface';
 import { UserAuthorizationContext } from '../authorization/interfaces/user-authorization-context.interface';
 
@@ -26,6 +28,8 @@ export class AuthService {
     @InjectRepository(Role)
     private readonly rolesRepository: Repository<Role>,
     private readonly jwtService: JwtService,
+    @InjectDataSource()
+    private readonly dataSource: DataSource,
   ) {}
 
   async register(dto: RegisterDto) {
@@ -120,5 +124,41 @@ export class AuthService {
       permissions: authorizationContext.permissions,
       permissionsVersion: authorizationContext.permissionsVersion,
     };
+  }
+
+  async changePassword(userId: number, dto: ChangePasswordDto) {
+    if (dto.currentPassword === dto.newPassword) {
+      throw new BadRequestException(
+        'The new password must be different from the current password',
+      );
+    }
+
+    await this.dataSource.transaction(async (manager) => {
+      const user = await manager
+        .getRepository(User)
+        .createQueryBuilder('user')
+        .addSelect('user.password')
+        .setLock('pessimistic_write')
+        .where('user.id = :userId', { userId })
+        .getOne();
+
+      if (!user) {
+        throw new UnauthorizedException();
+      }
+
+      const currentPasswordMatches = await bcrypt.compare(
+        dto.currentPassword,
+        user.password,
+      );
+
+      if (!currentPasswordMatches) {
+        throw new BadRequestException('Current password is incorrect');
+      }
+
+      const password = await bcrypt.hash(dto.newPassword, 12);
+      await manager.getRepository(User).update(userId, { password });
+    });
+
+    return { message: 'Password changed successfully' };
   }
 }

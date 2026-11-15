@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import { CurrentAuthorizationContext } from './decorators/current-authorization-context.decorator';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -28,5 +29,15 @@ export class AuthController {
     authorizationContext: UserAuthorizationContext,
   ) {
     return this.authService.getProfile(authorizationContext);
+  }
+
+  @Post('change-password')
+  @UseGuards(JwtAuthGuard)
+  changePassword(
+    @CurrentAuthorizationContext()
+    authorizationContext: UserAuthorizationContext,
+    @Body() dto: ChangePasswordDto,
+  ) {
+    return this.authService.changePassword(authorizationContext.id, dto);
   }
 }
