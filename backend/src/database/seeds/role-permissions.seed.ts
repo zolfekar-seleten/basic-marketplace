@@ -33,6 +33,12 @@ const permissionsByRole: Record<string, readonly PermissionName[]> = {
     'users.manage',
     'suppliers.create',
     'categories.manage',
+    'permissions.view',
+    'permissions.create',
+    'permissions.update',
+    'permissions.delete',
+    'roles.view',
+    'roles.assign_permissions',
   ],
 };
 
@@ -43,6 +49,7 @@ export async function seedRolePermissions(
   adminUserId: number,
 ): Promise<void> {
   const repository = manager.getRepository(RolePermission);
+  const changedRoleNames = new Set<string>();
 
   for (const [roleName, permissionNames] of Object.entries(permissionsByRole)) {
     const role = roles.get(roleName);
@@ -73,7 +80,19 @@ export async function seedRolePermissions(
             assignedBy: adminUserId,
           }),
         );
+        changedRoleNames.add(roleName);
       }
+    }
+  }
+
+  const roleRepository = manager.getRepository(Role);
+
+  for (const roleName of changedRoleNames) {
+    const role = roles.get(roleName);
+
+    if (role) {
+      role.permissionsVersion += 1;
+      await roleRepository.save(role);
     }
   }
 }

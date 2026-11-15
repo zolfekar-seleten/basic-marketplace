@@ -14,6 +14,7 @@ import { User } from '../users/entities/user.entity';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { AuthenticatedUser } from './interfaces/authenticated-user.interface';
+import { UserAuthorizationContext } from '../authorization/interfaces/user-authorization-context.interface';
 
 const INVALID_CREDENTIALS_MESSAGE = 'Invalid email or password';
 
@@ -110,7 +111,14 @@ export class AuthService {
     };
   }
 
-  getProfile(user: AuthenticatedUser): AuthenticatedUser {
-    return user;
+  getProfile(authorizationContext: UserAuthorizationContext) {
+    return {
+      id: authorizationContext.id,
+      name: authorizationContext.name,
+      email: authorizationContext.email,
+      role: authorizationContext.role,
+      permissions: authorizationContext.permissions,
+      permissionsVersion: authorizationContext.permissionsVersion,
+    };
   }
 }

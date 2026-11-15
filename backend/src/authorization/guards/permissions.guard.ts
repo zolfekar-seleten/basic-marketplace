@@ -14,6 +14,9 @@ interface AuthenticatedRequest {
   user?: {
     id: number;
   };
+  authorizationContext?: {
+    permissions: string[];
+  };
 }
 
 @Injectable()
@@ -40,9 +43,15 @@ export class PermissionsGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    const userPermissions = await this.permissionsService.getPermissionsForUser(
-      userId,
-    );
+    const authorizationContext =
+      request.authorizationContext ??
+      (await this.permissionsService.getAuthorizationContextForUser(userId));
+
+    if (!authorizationContext) {
+      throw new UnauthorizedException();
+    }
+
+    const userPermissions = authorizationContext.permissions;
     const grantedPermissions = new Set(userPermissions);
     const hasAllPermissions = requiredPermissions.every((permission) =>
       grantedPermissions.has(permission),

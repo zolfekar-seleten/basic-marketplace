@@ -17,7 +17,9 @@ async function bootstrap() {
     }),
   );
 
-  app.enableCors();
+  app.enableCors({
+    exposedHeaders: ['X-Permissions-Version'],
+  });
 
   const port = Number(configService.get<string>('APP_PORT')) || 3000;
 

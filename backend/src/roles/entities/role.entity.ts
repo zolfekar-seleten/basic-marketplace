@@ -21,6 +21,9 @@ export class Role {
   @Column({ type: 'varchar', length: 255, nullable: true })
   description: string | null;
 
+  @Column({ name: 'permissions_version', type: 'int', default: 1 })
+  permissionsVersion: number;
+
   @OneToMany(() => User, (user) => user.role)
   users: User[];
 

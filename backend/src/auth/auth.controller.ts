@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
-import { CurrentUser } from './decorators/current-user.decorator';
+import { CurrentAuthorizationContext } from './decorators/current-authorization-context.decorator';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import type { AuthenticatedUser } from './interfaces/authenticated-user.interface';
+import type { UserAuthorizationContext } from '../authorization/interfaces/user-authorization-context.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -23,7 +23,10 @@ export class AuthController {
 
   @Get('profile')
   @UseGuards(JwtAuthGuard)
-  profile(@CurrentUser() user: AuthenticatedUser) {
-    return this.authService.getProfile(user);
+  profile(
+    @CurrentAuthorizationContext()
+    authorizationContext: UserAuthorizationContext,
+  ) {
+    return this.authService.getProfile(authorizationContext);
   }
 }
