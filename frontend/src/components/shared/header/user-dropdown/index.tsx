@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown";
 import { useChangeLocale, useLocale, useTranslations } from "@/i18n";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import { getLanguage, languages } from "@/i18n/languages";
 import type { Locale } from "@/i18n/routing";
 import {
@@ -29,12 +30,18 @@ export default function UserDropdown() {
   const t = useTranslations("userDropdown");
   const locale = useLocale() as Locale;
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const changeLocale = useChangeLocale();
   const { pathname } = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
   const currentLang = getLanguage(locale);
   const CurrentFlagIcon = currentLang.FlagIcon;
+
+  const handleLogout = () => {
+    logout();
+    void navigate("/login", { replace: true });
+  };
 
   const handleSelectLanguage = (id: Locale) => {
     changeLocale(id);
@@ -48,7 +55,7 @@ export default function UserDropdown() {
           <img src="/images/user/owner.png" alt="User" className="size-11" />
         </span>
 
-        <span className="me-1 block text-sm font-medium">Musharof</span>
+        <span className="me-1 block text-sm font-medium">{user?.name ?? "Account"}</span>
 
         <ChevronDownIcon
           className={cn(
@@ -61,10 +68,10 @@ export default function UserDropdown() {
       <DropdownMenuContent align="end" sideOffset={12} className="w-65 p-3">
         <div className="px-3 py-2">
           <span className="block text-sm font-medium text-gray-700 dark:text-gray-400">
-            Musharof Chowdhury
+            {user?.name ?? "Account"}
           </span>
           <span className="mt-0.5 block text-xs text-gray-500 dark:text-gray-400">
-            randomuser@pimjo.com
+            {user?.email ?? ""}
           </span>
         </div>
 
@@ -147,7 +154,7 @@ export default function UserDropdown() {
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem variant="destructive" render={<Link to="/signin" />}>
+        <DropdownMenuItem variant="destructive" onClick={handleLogout}>
           <LogOutIcon />
           {t("signOut")}
         </DropdownMenuItem>

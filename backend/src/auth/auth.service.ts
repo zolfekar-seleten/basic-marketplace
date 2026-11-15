@@ -64,7 +64,7 @@ export class AuthService {
       throw error;
     }
 
-    return {
+    return this.createAuthResponse({
       id: user.id,
       name: user.name,
       email: user.email,
@@ -72,8 +72,7 @@ export class AuthService {
         id: buyerRole.id,
         name: buyerRole.name,
       },
-      createdAt: user.createdAt,
-    };
+    });
   }
 
   async login(dto: LoginDto) {
@@ -101,22 +100,18 @@ export class AuthService {
         name: user.role.name,
       },
     };
+    return this.createAuthResponse(authenticatedUser);
+  }
+
+  private async createAuthResponse(user: AuthenticatedUser) {
     const accessToken = await this.jwtService.signAsync({
-      sub: authenticatedUser.id,
+      sub: user.id,
       name: user.name,
-      email: authenticatedUser.email,
-      role: authenticatedUser.role,
+      email: user.email,
+      role: user.role,
     });
 
-    return {
-      accessToken,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: authenticatedUser.role,
-      },
-    };
+    return { accessToken, user };
   }
 
   getProfile(authorizationContext: UserAuthorizationContext) {
