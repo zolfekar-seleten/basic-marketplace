@@ -84,7 +84,11 @@ export class AuthService {
       .where('user.email = :email', { email: dto.email })
       .getOne();
 
-    if (!user || !(await bcrypt.compare(dto.password, user.password))) {
+    if (
+      !user ||
+      !user.isActive ||
+      !(await bcrypt.compare(dto.password, user.password))
+    ) {
       throw new UnauthorizedException(INVALID_CREDENTIALS_MESSAGE);
     }
 

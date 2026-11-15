@@ -30,6 +30,9 @@ export class User {
   @Column({ type: 'varchar', length: 255, select: false })
   password: string;
 
+  @Column({ name: 'is_active', type: 'boolean', default: true })
+  isActive: boolean;
+
   @Column({ name: 'role_id' })
   roleId: number;
 

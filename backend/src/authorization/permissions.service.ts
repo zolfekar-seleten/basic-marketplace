@@ -32,6 +32,7 @@ export class PermissionsService {
         .leftJoin('role.rolePermissions', 'rolePermission')
         .leftJoin('rolePermission.permission', 'permission')
         .where('user.id = :userId', { userId })
+        .andWhere('user.isActive = true')
         .select('user.id', 'id')
         .addSelect('user.name', 'name')
         .addSelect('user.email', 'email')

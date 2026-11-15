@@ -13,6 +13,7 @@ import { CartModule } from './cart/cart.module';
 import { OrdersModule } from './orders/orders.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthorizationModule } from './authorization/authorization.module';
+import { SuppliersModule } from './suppliers/suppliers.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { AuthorizationModule } from './authorization/authorization.module';
     OrdersModule,
     AuthModule,
     AuthorizationModule,
+    SuppliersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
