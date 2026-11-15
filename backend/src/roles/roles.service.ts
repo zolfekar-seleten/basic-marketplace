@@ -31,12 +31,31 @@ export interface RolePermissionsResponse {
   }>;
 }
 
+export interface RoleListItem {
+  id: number;
+  name: string;
+  description: string | null;
+  permissionsVersion: number;
+}
+
 @Injectable()
 export class RolesService {
   constructor(
     @InjectDataSource()
     private readonly dataSource: DataSource,
   ) {}
+
+  getRoles(): Promise<RoleListItem[]> {
+    return this.dataSource.manager.getRepository(Role).find({
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        permissionsVersion: true,
+      },
+      order: { name: 'ASC' },
+    });
+  }
 
   async getRolePermissions(roleId: number): Promise<RolePermissionsResponse> {
     return this.loadRolePermissions(this.dataSource.manager, roleId);

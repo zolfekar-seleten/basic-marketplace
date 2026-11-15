@@ -13,6 +13,8 @@ import SupplierDetailsPage from "@/features/suppliers/pages/SupplierDetailsPage"
 import PermissionsPage from "@/features/permissions/pages/PermissionsPage";
 import CreatePermissionPage from "@/features/permissions/pages/CreatePermissionPage";
 import PermissionDetailsPage from "@/features/permissions/pages/PermissionDetailsPage";
+import RolesPage from "@/features/roles/pages/RolesPage";
+import RoleDetailsPage from "@/features/roles/pages/RoleDetailsPage";
 import MarketplaceLayout from "@/layouts/MarketplaceLayout";
 import MarketplaceHome from "@/pages/marketplace/MarketplaceHome";
 import EcommercePage from "@/pages/main/dashboard/ecommerce";
@@ -64,6 +66,8 @@ export default function AppRoutes() {
           <Route path="permissions" element={<PermissionsPage />} />
           <Route path="permissions/new" element={<CreatePermissionPage />} />
           <Route path="permissions/:id" element={<PermissionDetailsPage />} />
+          <Route path="roles" element={<RolesPage />} />
+          <Route path="roles/:id" element={<RoleDetailsPage />} />
           <Route path="*" element={<RoutePlaceholder title="Admin dashboard" />} />
         </Route>
       </Route>

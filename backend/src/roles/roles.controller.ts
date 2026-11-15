@@ -27,6 +27,12 @@ interface AuthorizationRequest extends Request {
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
+  @Get()
+  @Permissions('roles.view')
+  findAll() {
+    return this.rolesService.getRoles();
+  }
+
   @Get(':id/permissions')
   @Permissions('roles.view')
   getPermissions(@Param('id', ParseIntPipe) id: number) {

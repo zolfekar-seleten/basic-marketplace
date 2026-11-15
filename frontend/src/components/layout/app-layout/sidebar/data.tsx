@@ -19,6 +19,12 @@ export const navItems: NavItem[] = [
     path: "/dashboard/admin/permissions",
     adminOnly: true,
   },
+  {
+    icon: <UsersIcon className="size-6" />,
+    key: "roles",
+    path: "/dashboard/admin/roles",
+    adminOnly: true,
+  },
 ];
 
 export const othersItems: NavItem[] = [];
