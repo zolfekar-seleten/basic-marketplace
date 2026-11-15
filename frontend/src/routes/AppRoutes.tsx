@@ -21,6 +21,8 @@ import CategoryDetailsPage from "@/features/categories/pages/CategoryDetailsPage
 import ProductsPage from "@/features/products/pages/ProductsPage";
 import CreateProductPage from "@/features/products/pages/CreateProductPage";
 import ProductDetailsPage from "@/features/products/pages/ProductDetailsPage";
+import SupplierOrdersPage from "@/features/orders/pages/SupplierOrdersPage";
+import SupplierOrderDetailsPage from "@/features/orders/pages/SupplierOrderDetailsPage";
 import MarketplaceLayout from "@/layouts/MarketplaceLayout";
 import MarketplaceHome from "@/pages/marketplace/MarketplaceHome";
 import EcommercePage from "@/pages/main/dashboard/ecommerce";
@@ -87,6 +89,8 @@ export default function AppRoutes() {
           <Route path="products" element={<ProductsPage />} />
           <Route path="products/new" element={<CreateProductPage />} />
           <Route path="products/:id" element={<ProductDetailsPage />} />
+          <Route path="orders" element={<SupplierOrdersPage />} />
+          <Route path="orders/:id" element={<SupplierOrderDetailsPage />} />
           <Route path="*" element={<RoutePlaceholder title="Supplier dashboard" />} />
         </Route>
       </Route>
