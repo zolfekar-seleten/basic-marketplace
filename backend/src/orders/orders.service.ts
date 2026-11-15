@@ -70,6 +70,52 @@ export class OrdersService {
     return this.toBuyerOrderResponse(order);
   }
 
+  async findSupplierOrders(
+    query: ListOrdersDto,
+    supplierContext: UserAuthorizationContext,
+  ) {
+    this.assertSupplierRole(supplierContext);
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 10;
+    const direction = query.sort === 'oldest' ? 'ASC' : 'DESC';
+    const builder = this.supplierOrdersQuery(supplierContext.id);
+
+    if (query.status) {
+      builder.andWhere('order.status = :status', { status: query.status });
+    }
+
+    const [orders, total] = await builder
+      .orderBy('order.createdAt', direction)
+      .addOrderBy('order.id', direction)
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getManyAndCount();
+
+    return {
+      data: orders.map((order) => this.toSupplierOrderResponse(order)),
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
+  }
+
+  async findSupplierOrder(
+    id: number,
+    supplierContext: UserAuthorizationContext,
+  ) {
+    this.assertSupplierRole(supplierContext);
+    const order = await this.supplierOrdersQuery(supplierContext.id)
+      .andWhere('order.id = :id', { id })
+      .getOne();
+
+    if (!order) {
+      throw new NotFoundException('Order was not found');
+    }
+
+    return this.toSupplierOrderResponse(order);
+  }
+
   private buyerOrdersQuery(buyerId: number) {
     return this.dataSource
       .getRepository(Order)
@@ -123,6 +169,65 @@ export class OrdersService {
     if (buyerContext.role.name !== 'buyer') {
       throw new ForbiddenException(
         'Only buyers can access buyer order history',
+      );
+    }
+  }
+
+  private supplierOrdersQuery(supplierId: number) {
+    return this.dataSource
+      .getRepository(Order)
+      .createQueryBuilder('order')
+      .select([
+        'order.id',
+        'order.buyerId',
+        'order.supplierId',
+        'order.status',
+        'order.totalAmount',
+        'order.createdAt',
+        'order.updatedAt',
+        'buyer.id',
+        'buyer.name',
+        'buyer.email',
+        'item.id',
+        'item.orderId',
+        'item.productId',
+        'item.productName',
+        'item.unitPrice',
+        'item.quantity',
+        'item.subtotal',
+        'item.createdAt',
+      ])
+      .innerJoinAndSelect('order.buyer', 'buyer')
+      .leftJoinAndSelect('order.items', 'item')
+      .where('order.supplierId = :supplierId', { supplierId });
+  }
+
+  private toSupplierOrderResponse(order: Order) {
+    return {
+      id: order.id,
+      status: order.status,
+      totalAmount: order.totalAmount,
+      createdAt: order.createdAt,
+      updatedAt: order.updatedAt,
+      buyer: {
+        id: order.buyer.id,
+        name: order.buyer.name,
+        email: order.buyer.email,
+      },
+      items: (order.items ?? []).map((item) => ({
+        productId: item.productId,
+        productName: item.productName,
+        unitPrice: item.unitPrice,
+        quantity: item.quantity,
+        subtotal: item.subtotal,
+      })),
+    };
+  }
+
+  private assertSupplierRole(supplierContext: UserAuthorizationContext): void {
+    if (supplierContext.role.name !== 'supplier') {
+      throw new ForbiddenException(
+        'Only suppliers can access supplier order information',
       );
     }
   }

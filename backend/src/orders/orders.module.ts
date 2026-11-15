@@ -11,6 +11,7 @@ import { AuthModule } from '../auth/auth.module';
 import { AuthorizationModule } from '../authorization/authorization.module';
 import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
+import { SupplierOrdersController } from './supplier-orders.controller';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { OrdersService } from './orders.service';
     AuthModule,
     AuthorizationModule,
   ],
-  controllers: [OrdersController],
+  controllers: [OrdersController, SupplierOrdersController],
   providers: [OrdersService],
   exports: [TypeOrmModule, OrdersService],
 })
