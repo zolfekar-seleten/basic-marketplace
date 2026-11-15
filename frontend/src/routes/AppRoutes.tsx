@@ -23,6 +23,7 @@ import CreateProductPage from "@/features/products/pages/CreateProductPage";
 import ProductDetailsPage from "@/features/products/pages/ProductDetailsPage";
 import SupplierOrdersPage from "@/features/orders/pages/SupplierOrdersPage";
 import SupplierOrderDetailsPage from "@/features/orders/pages/SupplierOrderDetailsPage";
+import SupplierDashboardPage from "@/features/supplier-dashboard/pages/SupplierDashboardPage";
 import MarketplaceLayout from "@/layouts/MarketplaceLayout";
 import MarketplaceHome from "@/pages/marketplace/MarketplaceHome";
 import EcommercePage from "@/pages/main/dashboard/ecommerce";
@@ -85,7 +86,7 @@ export default function AppRoutes() {
 
       <Route path="dashboard/supplier" element={<RequireRoles roles={["supplier"]} />}>
         <Route element={<AppLayout />}>
-          <Route index element={<RoutePlaceholder title="Supplier dashboard" />} />
+          <Route index element={<SupplierDashboardPage />} />
           <Route path="products" element={<ProductsPage />} />
           <Route path="products/new" element={<CreateProductPage />} />
           <Route path="products/:id" element={<ProductDetailsPage />} />
