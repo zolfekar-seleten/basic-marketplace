@@ -14,6 +14,7 @@ import { Product } from '../products/entities/product.entity';
 import { User } from '../users/entities/user.entity';
 import { OrderItem } from './entities/order-item.entity';
 import { Order } from './entities/order.entity';
+import { ListOrdersDto } from './dto/list-orders.dto';
 
 interface CheckoutLine {
   product: Product;
@@ -25,6 +26,106 @@ interface CheckoutLine {
 @Injectable()
 export class OrdersService {
   constructor(@InjectDataSource() private readonly dataSource: DataSource) {}
+
+  async findBuyerOrders(
+    query: ListOrdersDto,
+    buyerContext: UserAuthorizationContext,
+  ) {
+    this.assertBuyerRole(buyerContext);
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 10;
+    const direction = query.sort === 'oldest' ? 'ASC' : 'DESC';
+    const builder = this.buyerOrdersQuery(buyerContext.id);
+
+    if (query.status) {
+      builder.andWhere('order.status = :status', { status: query.status });
+    }
+
+    const [orders, total] = await builder
+      .orderBy('order.createdAt', direction)
+      .addOrderBy('order.id', direction)
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getManyAndCount();
+
+    return {
+      data: orders.map((order) => this.toBuyerOrderResponse(order)),
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
+  }
+
+  async findBuyerOrder(id: number, buyerContext: UserAuthorizationContext) {
+    this.assertBuyerRole(buyerContext);
+    const order = await this.buyerOrdersQuery(buyerContext.id)
+      .andWhere('order.id = :id', { id })
+      .getOne();
+
+    if (!order) {
+      throw new NotFoundException('Order was not found');
+    }
+
+    return this.toBuyerOrderResponse(order);
+  }
+
+  private buyerOrdersQuery(buyerId: number) {
+    return this.dataSource
+      .getRepository(Order)
+      .createQueryBuilder('order')
+      .select([
+        'order.id',
+        'order.buyerId',
+        'order.supplierId',
+        'order.status',
+        'order.totalAmount',
+        'order.createdAt',
+        'order.updatedAt',
+        'supplier.id',
+        'supplier.name',
+        'item.id',
+        'item.orderId',
+        'item.productId',
+        'item.productName',
+        'item.unitPrice',
+        'item.quantity',
+        'item.subtotal',
+        'item.createdAt',
+      ])
+      .innerJoinAndSelect('order.supplier', 'supplier')
+      .leftJoinAndSelect('order.items', 'item')
+      .where('order.buyerId = :buyerId', { buyerId });
+  }
+
+  private toBuyerOrderResponse(order: Order) {
+    return {
+      id: order.id,
+      status: order.status,
+      totalAmount: order.totalAmount,
+      createdAt: order.createdAt,
+      updatedAt: order.updatedAt,
+      supplier: {
+        id: order.supplier.id,
+        name: order.supplier.name,
+      },
+      items: (order.items ?? []).map((item) => ({
+        productId: item.productId,
+        productName: item.productName,
+        unitPrice: item.unitPrice,
+        quantity: item.quantity,
+        subtotal: item.subtotal,
+      })),
+    };
+  }
+
+  private assertBuyerRole(buyerContext: UserAuthorizationContext): void {
+    if (buyerContext.role.name !== 'buyer') {
+      throw new ForbiddenException(
+        'Only buyers can access buyer order history',
+      );
+    }
+  }
 
   async checkout(buyerContext: UserAuthorizationContext) {
     if (buyerContext.role.name !== 'buyer') {
