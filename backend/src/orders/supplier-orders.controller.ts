@@ -1,8 +1,10 @@
 import {
   Controller,
   Get,
+  Body,
   Param,
   ParseIntPipe,
+  Patch,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -14,6 +16,7 @@ import { CurrentAuthorizationContext } from '../auth/decorators/current-authoriz
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ListOrdersDto } from './dto/list-orders.dto';
 import { OrdersService } from './orders.service';
+import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 
 @Controller('supplier/orders')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -36,5 +39,15 @@ export class SupplierOrdersController {
     @CurrentAuthorizationContext() supplier: UserAuthorizationContext,
   ) {
     return this.ordersService.findSupplierOrder(id, supplier);
+  }
+
+  @Patch(':id/status')
+  @Permissions('orders.update_status')
+  updateStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateOrderStatusDto,
+    @CurrentAuthorizationContext() supplier: UserAuthorizationContext,
+  ) {
+    return this.ordersService.updateOrderStatus(id, dto, supplier);
   }
 }

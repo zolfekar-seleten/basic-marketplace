@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource, In } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 
 import type { UserAuthorizationContext } from '../authorization/interfaces/user-authorization-context.interface';
 import { Cart } from '../cart/entities/cart.entity';
@@ -15,6 +15,7 @@ import { User } from '../users/entities/user.entity';
 import { OrderItem } from './entities/order-item.entity';
 import { Order } from './entities/order.entity';
 import { ListOrdersDto } from './dto/list-orders.dto';
+import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 
 interface CheckoutLine {
   product: Product;
@@ -116,6 +117,54 @@ export class OrdersService {
     return this.toSupplierOrderResponse(order);
   }
 
+  async updateOrderStatus(
+    id: number,
+    dto: UpdateOrderStatusDto,
+    userContext: UserAuthorizationContext,
+  ) {
+    this.assertCanUpdateOrderStatus(userContext);
+
+    if (dto.status !== 'completed') {
+      throw new ConflictException(
+        'Orders can only transition from pending to completed',
+      );
+    }
+
+    return this.dataSource.transaction(async (manager) => {
+      const repository = manager.getRepository(Order);
+      const query = repository
+        .createQueryBuilder('order')
+        .setLock('pessimistic_write')
+        .where('order.id = :id', { id });
+
+      if (userContext.role.name === 'supplier') {
+        query.andWhere('order.supplierId = :supplierId', {
+          supplierId: userContext.id,
+        });
+      }
+
+      const order = await query.getOne();
+      if (!order) {
+        throw new NotFoundException('Order was not found');
+      }
+      if (order.status !== 'pending') {
+        throw new ConflictException(
+          'Only pending orders can be marked as completed',
+        );
+      }
+
+      await repository.update({ id: order.id }, { status: 'completed' });
+      const updated = await this.orderWithBuyerAndItemsQuery(repository)
+        .where('order.id = :id', { id: order.id })
+        .getOne();
+      if (!updated) {
+        throw new NotFoundException('Order was not found');
+      }
+
+      return this.toSupplierOrderResponse(updated);
+    });
+  }
+
   private buyerOrdersQuery(buyerId: number) {
     return this.dataSource
       .getRepository(Order)
@@ -174,8 +223,13 @@ export class OrdersService {
   }
 
   private supplierOrdersQuery(supplierId: number) {
-    return this.dataSource
-      .getRepository(Order)
+    return this.orderWithBuyerAndItemsQuery(
+      this.dataSource.getRepository(Order),
+    ).where('order.supplierId = :supplierId', { supplierId });
+  }
+
+  private orderWithBuyerAndItemsQuery(repository: Repository<Order>) {
+    return repository
       .createQueryBuilder('order')
       .select([
         'order.id',
@@ -198,8 +252,7 @@ export class OrdersService {
         'item.createdAt',
       ])
       .innerJoinAndSelect('order.buyer', 'buyer')
-      .leftJoinAndSelect('order.items', 'item')
-      .where('order.supplierId = :supplierId', { supplierId });
+      .leftJoinAndSelect('order.items', 'item');
   }
 
   private toSupplierOrderResponse(order: Order) {
@@ -230,6 +283,23 @@ export class OrdersService {
         'Only suppliers can access supplier order information',
       );
     }
+  }
+
+  private assertCanUpdateOrderStatus(
+    userContext: UserAuthorizationContext,
+  ): void {
+    if (userContext.role.name === 'supplier') return;
+
+    if (
+      userContext.role.name === 'admin' &&
+      userContext.permissions.includes('orders.update_status')
+    ) {
+      return;
+    }
+
+    throw new ForbiddenException(
+      'Only suppliers and authorized administrators can update order status',
+    );
   }
 
   async checkout(buyerContext: UserAuthorizationContext) {
