@@ -31,6 +31,8 @@ import MarketplaceProductsPage from "@/features/products/pages/MarketplaceProduc
 import MarketplaceProductDetailsPage from "@/features/products/pages/MarketplaceProductDetailsPage";
 import CartPage from "@/features/cart/pages/CartPage";
 import CheckoutPage from "@/features/orders/pages/CheckoutPage";
+import BuyerOrderHistoryPage from "@/features/orders/pages/BuyerOrderHistoryPage";
+import BuyerOrderDetailsPage from "@/features/orders/pages/BuyerOrderDetailsPage";
 import { Error404Page } from "@/pages/main/pages";
 import { Navigate, Route, Routes } from "react-router";
 
@@ -56,11 +58,9 @@ export default function AppRoutes() {
         <Route element={<RequireRoles roles={["buyer"]} />}>
           <Route path="cart" element={<CartPage />} />
           <Route path="checkout" element={<CheckoutPage />} />
+          <Route path="my-orders" element={<BuyerOrderHistoryPage />} />
+          <Route path="my-orders/:id" element={<BuyerOrderDetailsPage />} />
         </Route>
-      </Route>
-
-      <Route element={<RequireRoles roles={["buyer"]} />}>
-        <Route path="my-orders" element={<RoutePlaceholder title="My orders" />} />
       </Route>
 
       <Route element={<RequireRoles roles={["admin", "supplier"]} />}>
