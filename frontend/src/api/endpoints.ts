@@ -3,5 +3,6 @@ export const API_ENDPOINTS = {
     login: "/auth/login",
     register: "/auth/register",
     profile: "/auth/profile",
+    changePassword: "/auth/change-password",
   },
 } as const;

@@ -50,13 +50,15 @@ export default function LoginPage() {
             destination.startsWith(`${path}/`) ||
             (path === "/cart" && destination.startsWith("/cart?")),
         );
+      const isAccountDestination = destination === "/account/change-password";
       const canReturnToDestination =
         typeof destination === "string" &&
         destination.startsWith("/") &&
-        (user.role.name === "buyer"
-          ? isBuyerDestination
-          : rolePrefix !== null &&
-            (destination === rolePrefix || destination.startsWith(`${rolePrefix}/`)));
+        (isAccountDestination ||
+          (user.role.name === "buyer"
+            ? isBuyerDestination
+            : rolePrefix !== null &&
+              (destination === rolePrefix || destination.startsWith(`${rolePrefix}/`))));
       void navigate(canReturnToDestination ? destination : home, { replace: true });
     } catch (error) {
       setSubmitError(getApiErrorMessage(error));

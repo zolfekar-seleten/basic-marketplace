@@ -33,6 +33,7 @@ import CartPage from "@/features/cart/pages/CartPage";
 import CheckoutPage from "@/features/orders/pages/CheckoutPage";
 import BuyerOrderHistoryPage from "@/features/orders/pages/BuyerOrderHistoryPage";
 import BuyerOrderDetailsPage from "@/features/orders/pages/BuyerOrderDetailsPage";
+import ChangePasswordPage from "@/features/auth/pages/ChangePasswordPage";
 import { Error404Page } from "@/pages/main/pages";
 import { Navigate, Route, Routes } from "react-router";
 
@@ -42,6 +43,11 @@ function DashboardEntry() {
   if (user.role.name === "admin") return <Navigate to="/dashboard/admin" replace />;
   if (user.role.name === "supplier") return <Navigate to="/dashboard/supplier" replace />;
   return <Navigate to="/" replace />;
+}
+
+function AccountLayout() {
+  const { user } = useAuth();
+  return user?.role.name === "buyer" ? <MarketplaceLayout /> : <AppLayout />;
 }
 
 export default function AppRoutes() {
@@ -60,6 +66,12 @@ export default function AppRoutes() {
           <Route path="checkout" element={<CheckoutPage />} />
           <Route path="my-orders" element={<BuyerOrderHistoryPage />} />
           <Route path="my-orders/:id" element={<BuyerOrderDetailsPage />} />
+        </Route>
+      </Route>
+
+      <Route element={<RequireRoles roles={["admin", "supplier", "buyer"]} />}>
+        <Route element={<AccountLayout />}>
+          <Route path="account/change-password" element={<ChangePasswordPage />} />
         </Route>
       </Route>
 

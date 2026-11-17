@@ -23,6 +23,11 @@ export interface RegisterInput {
   password: string;
 }
 
+export interface ChangePasswordInput {
+  currentPassword: string;
+  newPassword: string;
+}
+
 export interface LoginResponse {
   accessToken: string;
   user: AuthUser;

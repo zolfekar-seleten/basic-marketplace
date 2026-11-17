@@ -5,7 +5,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown";
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import { ChevronDownIcon, LogOutIcon, UserCircleIcon } from "@/icons";
+import { ChevronDownIcon, KeyIcon, LogOutIcon, UserCircleIcon } from "@/icons";
 import { cn } from "@/utils";
 import { useState } from "react";
 import { useNavigate } from "react-router";
@@ -27,7 +27,9 @@ export default function UserDropdown() {
           <UserCircleIcon className="size-6" aria-hidden="true" />
         </span>
 
-        <span className="me-1 block text-sm font-medium">{user?.name ?? "Account"}</span>
+        <span className="me-1 block text-sm font-medium">
+          {user?.name ?? "Account"}
+        </span>
 
         <ChevronDownIcon
           className={cn(
@@ -46,6 +48,11 @@ export default function UserDropdown() {
             {user?.email ?? ""}
           </span>
         </div>
+
+        <DropdownMenuItem onClick={() => { setIsOpen(false); void navigate("/account/change-password"); }}>
+          <KeyIcon />
+          Change password
+        </DropdownMenuItem>
 
         <DropdownMenuItem variant="destructive" onClick={handleLogout}>
           <LogOutIcon />
