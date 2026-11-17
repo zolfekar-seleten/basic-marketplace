@@ -4,6 +4,10 @@ export interface CartItem {
     id: number;
     name: string;
     imageUrl: string | null;
+    supplier: {
+      id: number;
+      name: string;
+    };
     unitPrice: string;
     stock: number;
     isActive: boolean;

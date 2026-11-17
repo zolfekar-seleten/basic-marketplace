@@ -26,6 +26,10 @@ export interface CartItemResponse {
     id: number;
     name: string;
     imageUrl: string | null;
+    supplier: {
+      id: number;
+      name: string;
+    };
     unitPrice: string;
     stock: number;
     isActive: boolean;
@@ -195,6 +199,7 @@ export class CartService {
       .createQueryBuilder('cart')
       .leftJoinAndSelect('cart.items', 'item')
       .leftJoinAndSelect('item.product', 'product')
+      .leftJoinAndSelect('product.supplier', 'supplier')
       .where('cart.id = :cartId', { cartId })
       .orderBy('item.id', 'ASC')
       .getOne();
@@ -218,6 +223,10 @@ export class CartService {
           id: product.id,
           name: product.name,
           imageUrl: product.imageUrl,
+          supplier: {
+            id: product.supplier.id,
+            name: product.supplier.name,
+          },
           unitPrice: product.price,
           stock: product.stock,
           isActive: active,

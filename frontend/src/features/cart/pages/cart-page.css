@@ -111,6 +111,7 @@
 .marketplace-cart-summary-total { margin-top: 1rem; border-top: 1px solid var(--cart-border); padding-top: 1rem; font-size: .92rem; font-weight: 700; }
 .marketplace-cart-summary-total strong { color: var(--cart-pink); font-size: 1.15rem; }
 .marketplace-cart-summary > p { margin: .8rem 0 1.1rem; color: var(--cart-muted); font-size: .74rem; line-height: 1.5; }
+.marketplace-cart-checkout { width: 100%; margin-bottom: .65rem; background: var(--cart-pink); color: #fff; }
 .marketplace-continue-shopping { display: flex; min-height: 42px; align-items: center; justify-content: center; border: 1px solid var(--cart-pink); border-radius: 10px; color: var(--cart-pink); font-size: .83rem; font-weight: 700; text-decoration: none; }
 .marketplace-continue-shopping:hover { background: #fff2f7; }
 
